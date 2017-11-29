@@ -91,4 +91,9 @@ l2_category = pd.concat([l2_category, category['category_l2_name_en']], axis = 1
     f.figure.tight_layout()
 #%% Ranking in one category
 #example in category 16
+ia = (x2 - x1).dt.days
+cr = item['average_conversation_length']
+p = item2['successful_replies'] / item2['replies']
+is_1 = item['user_sk_encrypted'].value_counts()
 item_rank = item[item['l1_category'] == 16]
+
