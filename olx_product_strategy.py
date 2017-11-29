@@ -10,6 +10,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os 
 
+#%%%%% DATA LOADING & DESCRIPTION %%%%%%%
+os.chdir('D:\Sistema\Santiago\Desktop\OLX')
+category = pd.read_csv('category_data.csv')
+item = pd.read_csv('item_data.csv')
+
 #%%%%% DATA PREPROCESSING %%%%%%%
 os.chdir('D:\Sistema\Santiago\Desktop\OLX')
 category = pd.read_csv('category_data.csv')
@@ -26,14 +31,11 @@ item['l2_category'] = pd.to_numeric(item['l2_category'])
 l1_category = category['category_sk'].str.split('|',expand = True)[3]
 l1_category = pd.to_numeric(l1_category)
 l1_category = pd.concat([l1_category, category['category_l1_name_en']], axis = 1).drop_duplicates([3], keep = 'last')
-
+l1_category = l1_category.sort_values([3])
 
 l2_category = category['category_sk'].str.split('|',expand = True)[4].fillna(0)
 l2_category = pd.to_numeric(l2_category)
 l2_category = pd.concat([l2_category, category['category_l2_name_en']], axis = 1).drop_duplicates([4], keep = 'last')
-
-
-item['user_sk_encrypted'].nunique()
 
 
 #%%%%%%%% PLOTS %%%%%%%%%
@@ -82,6 +84,11 @@ item['user_sk_encrypted'].nunique()
     ax5.set_xlabel('intensity = replies / item antiquity')  
     ax5.set_ylabel('Items')
     ax5.set_title('Histogram : Intensity of replies per item')  
+    #%% Histogram of categories
+    plt.figure()
+    f = sns.countplot(y='l1_category', data=item)
+    f.set(yticklabels = l1_category['category_l1_name_en'])
+    f.figure.tight_layout()
 #%% Ranking in one category
 #example in category 16
 item_rank = item[item['l1_category'] == 16]
